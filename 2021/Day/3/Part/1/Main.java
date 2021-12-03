@@ -8,13 +8,13 @@ public class Main {
     public static void main(String[] args) {
         int numberOfLines = 0;
         final int numberOfBits = 12;
-        int[] lastIntegersQueue= new int[numberOfBits];
+        int[] bitCounter= new int[numberOfBits];
         try (Scanner scanner = new Scanner(new File("input"))) {
             while(scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 ++numberOfLines;
                 for (int i = 0; i < numberOfBits; i++) {
-                    lastIntegersQueue[i] += (line.charAt(i) == '1') ? 1 : 0;
+                    bitCounter[i] += (line.charAt(i) == '1') ? 1 : 0;
                 }
             }
         } catch (FileNotFoundException e) {
@@ -26,11 +26,11 @@ public class Main {
         int epsilon = 0;
         for (int i = 0; i < numberOfBits; i++) {
             final int toAdd =(1 << (numberOfBits-i-1));
-            if(lastIntegersQueue[i] == halfNumberOfLines) {
+            if(bitCounter[i] == halfNumberOfLines) {
                 gamma += toAdd;
                 epsilon += toAdd;
             }
-            else if(lastIntegersQueue[i] > halfNumberOfLines) {
+            else if(bitCounter[i] > halfNumberOfLines) {
                 gamma += toAdd;
             } else {
                 epsilon += toAdd;
