@@ -20,5 +20,6 @@ def read_input(filename):
             total += item_to_priority(overlap)
     print(total)
 
+
 if __name__ == '__main__':
     read_input('input')
