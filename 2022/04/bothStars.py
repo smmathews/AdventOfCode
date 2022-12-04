@@ -14,9 +14,9 @@ def read_input(filename):
             result = re.match(line_pattern, line)
             elf1.add_range(int(result.groupdict()["elf1_low"]), int(result.groupdict()["elf1_high"])+1)
             elf2.add_range(int(result.groupdict()["elf2_low"]), int(result.groupdict()["elf2_high"])+1)
-            intersect_cardinality = elf1.intersection_cardinality(elf2)
             if elf1.intersect(elf2):
                 any_overlap += 1
+                intersect_cardinality = elf1.intersection_cardinality(elf2)
                 if intersect_cardinality == len(elf1) or intersect_cardinality == len(elf2):
                     total_overlap += 1
     print("total overlap:" + str(total_overlap))
