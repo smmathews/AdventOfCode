@@ -6,6 +6,7 @@ line_pattern = re.compile(r"(?P<elf1_low>\d+)-(?P<elf1_high>\d+),(?P<elf2_low>\d
 
 def read_input(filename):
     total_overlap = 0
+    any_overlap = 0
     with open(filename, 'r') as input_file:
         for line in input_file:
             elf1 = BitMap()
@@ -14,9 +15,12 @@ def read_input(filename):
             elf1.add_range(int(result.groupdict()["elf1_low"]), int(result.groupdict()["elf1_high"])+1)
             elf2.add_range(int(result.groupdict()["elf2_low"]), int(result.groupdict()["elf2_high"])+1)
             intersect_cardinality = elf1.intersection_cardinality(elf2)
-            if intersect_cardinality == len(elf1) or intersect_cardinality == len(elf2):
-                total_overlap += 1
-    print(total_overlap)
+            if elf1.intersect(elf2):
+                any_overlap += 1
+                if intersect_cardinality == len(elf1) or intersect_cardinality == len(elf2):
+                    total_overlap += 1
+    print("total overlap:" + str(total_overlap))
+    print("any overlap:" + str(any_overlap))
 
 
 if __name__ == '__main__':
