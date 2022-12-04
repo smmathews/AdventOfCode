@@ -11,9 +11,9 @@ def read_input(filename):
         for line in input_file:
             elf1 = BitMap()
             elf2 = BitMap()
-            result = re.match(line_pattern, line)
-            elf1.add_range(int(result.groupdict()["elf1_low"]), int(result.groupdict()["elf1_high"])+1)
-            elf2.add_range(int(result.groupdict()["elf2_low"]), int(result.groupdict()["elf2_high"])+1)
+            result = re.match(line_pattern, line).groupdict()
+            elf1.add_range(int(result["elf1_low"]), int(result["elf1_high"])+1)
+            elf2.add_range(int(result["elf2_low"]), int(result["elf2_high"])+1)
             if elf1.intersect(elf2):
                 any_overlap += 1
                 intersect_cardinality = elf1.intersection_cardinality(elf2)
