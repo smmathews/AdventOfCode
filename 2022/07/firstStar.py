@@ -37,10 +37,8 @@ class Dir:
                     cur_line = file.readline()
             else:
                 cd_in_result = cd_in_pattern.match(cur_line).groupdict()
-                print("going in to " + cd_in_result['dir'])
                 self.dirs[cd_in_result['dir']].cd_in(file)
                 cur_line = file.readline()
-        print("going out")
 
 
     def sum_dirs_lte(self, max: int):
