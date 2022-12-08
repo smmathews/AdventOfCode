@@ -52,9 +52,27 @@ class Dir:
             self.calculated_size = sum(file.size for file in self.files.values())+sum(dir.calc_size() for dir in self.dirs.values())
         return self.calculated_size
 
+    def find_smallest_dir_lte(self, min_space_to_free: int):
+        if self.calc_size() < min_space_to_free:
+            return None
+        cur_dir = self
+        for dir in self.dirs.values():
+            to_test = dir.find_smallest_dir_lte(min_space_to_free)
+            if to_test and to_test.calc_size() < cur_dir.calc_size():
+                cur_dir = to_test
+        return cur_dir
+
 if __name__ == '__main__':
     with open('input') as file:
         file.readline()# read 'cd /'
         cur_dir = Dir()
         cur_dir.cd_in(file)
         print("first star:" + str(cur_dir.sum_dirs_lte(100000)))
+
+        os_space = 70000000
+        needed_space = 30000000
+        have_space = os_space - cur_dir.calc_size()
+        min_space_to_free = needed_space - have_space
+        dir_to_delete = cur_dir.find_smallest_dir_lte(min_space_to_free)
+
+        print("second star:" + str(dir_to_delete.calc_size()))
