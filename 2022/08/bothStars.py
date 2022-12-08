@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import numpy as np
 a = np.array([1, 2, 3])
 
+
 @dataclass
 class TreeGrid:
     trees: np.array = None
@@ -15,16 +16,10 @@ class TreeGrid:
         for y in range(0, self.trees.shape[1]):
             for x in range(0, self.trees.shape[0]):
                 elem = self.trees[y, x]
-                #print(elem)
-
                 up = self.trees[0:y, x]
-                #print("up:" + str(up))
                 down = np.flip(self.trees[y+1:self.trees.shape[1], x])
-                #print("down:" + str(down))
                 left = self.trees[y, 0:x]
-                #print("left:" + str(left))
                 right = np.flip(self.trees[y, x+1:self.trees.shape[0]])
-                #print("right:" + str(right))
                 to_check_arrays = [up, down, left, right]
                 for to_check in to_check_arrays:
                     if len(to_check) == 0 or max(tree for tree in to_check) < elem:
@@ -46,14 +41,13 @@ class TreeGrid:
                 for to_check in to_check_arrays:
                     i = 0
                     for tree in to_check:
+                        i += 1
                         if tree >= elem:
-                            i += 1
                             break
-                        else:
-                            i += 1
                     scenic_score = scenic_score*i
                 best = max(best, scenic_score)
         return best
+
 
 if __name__ == '__main__':
     grid = TreeGrid()
