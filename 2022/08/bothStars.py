@@ -12,7 +12,6 @@ class TreeGrid:
 
     def num_visible_from_outside(self):
         i = 0
-        #self.visible_trees = np.zeros(self.trees.shape, bool)
         for y in range(0, self.trees.shape[1]):
             for x in range(0, self.trees.shape[0]):
                 elem = self.trees[y, x]
@@ -33,9 +32,33 @@ class TreeGrid:
                         break
         return i
 
+    def highest_scenic_score_possible(self):
+        best = 0
+        for y in range(0, self.trees.shape[1]):
+            for x in range(0, self.trees.shape[0]):
+                elem = self.trees[y, x]
+                up = np.flip(self.trees[0:y, x])
+                down = self.trees[y+1:self.trees.shape[1], x]
+                left = np.flip(self.trees[y, 0:x])
+                right = self.trees[y, x+1:self.trees.shape[0]]
+                to_check_arrays = [up, down, left, right]
+                scenic_score = 1
+                for to_check in to_check_arrays:
+                    i = 0
+                    for tree in to_check:
+                        if tree >= elem:
+                            i += 1
+                            break
+                        else:
+                            i += 1
+                    scenic_score = scenic_score*i
+                best = max(best, scenic_score)
+        return best
+
 if __name__ == '__main__':
     grid = TreeGrid()
     with open('input') as file:
         grid.build(file)
 
     print("first star:" + str(grid.num_visible_from_outside()))
+    print("second star:" + str(grid.highest_scenic_score_possible()))
