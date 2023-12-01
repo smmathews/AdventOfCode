@@ -1,8 +1,11 @@
-package com.smmathews.aoc.y2023.days;
+package com.smmathews.aoc.y2023.d1;
 
 import com.smmathews.aoc.y2023.Day;
 import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @ShellComponent
@@ -24,5 +27,13 @@ public class Trebuchet implements Day {
             }
             return Objects.requireNonNull(first) + Objects.requireNonNull(last);
         }).sum());
+    }
+
+    @ShellMethod(key = "d1s1")
+    public String d1star1(
+    ) throws IOException {
+        try (var input = getClass().getResourceAsStream("star1.txt")) {
+            return run(new String(Objects.requireNonNull(input).readAllBytes(), StandardCharsets.UTF_8));
+        }
     }
 }

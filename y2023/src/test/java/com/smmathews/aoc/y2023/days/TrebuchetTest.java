@@ -1,5 +1,6 @@
 package com.smmathews.aoc.y2023.days;
 
+import com.smmathews.aoc.y2023.d1.Trebuchet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
