@@ -20,4 +20,13 @@ class TrebuchetTest {
             Assertions.assertEquals(new String(Objects.requireNonNull(expectedOutput).readAllBytes(), StandardCharsets.UTF_8), outputStream.toString());
         }
     }
+
+    @Test
+    void day1_star2_small() throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try(var input = getClass().getResourceAsStream("day1_star2_small_input.txt"); var expectedOutput = getClass().getResourceAsStream("day1_star2_small_output.txt")) {
+            trebuchet.run(Objects.requireNonNull(input), outputStream);
+            Assertions.assertEquals(new String(Objects.requireNonNull(expectedOutput).readAllBytes(), StandardCharsets.UTF_8), outputStream.toString());
+        }
+    }
 }
