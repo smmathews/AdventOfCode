@@ -29,6 +29,8 @@ public class Trebuchet implements Day {
 
     private final Map<String, Integer> writtenLookups = Arrays.stream(writtenNumbers.values()).collect(Collectors.toMap(Enum::name, Enum::ordinal));
 
+    private boolean checkWritten = false;
+
     @Override
     public String run(String input) {
         return String.valueOf(input.lines().mapToInt(line -> {
@@ -48,24 +50,26 @@ public class Trebuchet implements Day {
                 }
             }
 
-            if(firstIndex[0] > 0) {
-                writtenLookups.forEach((key, value) -> {
-                    var found = line.indexOf(key, 0, line.length());
-                    if (found != -1 && found < firstIndex[0]) {
-                        firstIndex[0] = found;
-                        first[0] = value;
-                    }
-                });
-            }
-            for (int i = line.length() - 1; i > lastIndex[0]; --i) {
-                int finalI = i;
-                writtenLookups.forEach((key, value) -> {
-                    var found = line.indexOf(key, finalI, line.length());
-                    if (found != -1) {
-                        lastIndex[0] = found;
-                        last[0] = value;
-                    }
-                });
+            if(checkWritten) {
+                if (firstIndex[0] > 0) {
+                    writtenLookups.forEach((key, value) -> {
+                        var found = line.indexOf(key, 0, line.length());
+                        if (found != -1 && found < firstIndex[0]) {
+                            firstIndex[0] = found;
+                            first[0] = value;
+                        }
+                    });
+                }
+                for (int i = line.length() - 1; i > lastIndex[0]; --i) {
+                    int finalI = i;
+                    writtenLookups.forEach((key, value) -> {
+                        var found = line.indexOf(key, finalI, line.length());
+                        if (found != -1) {
+                            lastIndex[0] = found;
+                            last[0] = value;
+                        }
+                    });
+                }
             }
 
             return Objects.requireNonNull(first[0])*10 + Objects.requireNonNull(last[0]);
@@ -78,5 +82,12 @@ public class Trebuchet implements Day {
         try (var input = getClass().getResourceAsStream("star1.txt")) {
             return run(new String(Objects.requireNonNull(input).readAllBytes(), StandardCharsets.UTF_8));
         }
+    }
+
+    @ShellMethod(key = "d1s2")
+    public String d1star2(
+    ) throws IOException {
+        this.checkWritten = true;
+        return d1star1();
     }
 }
