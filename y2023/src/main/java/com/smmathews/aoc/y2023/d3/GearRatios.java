@@ -3,39 +3,19 @@ package com.smmathews.aoc.y2023.d3;
 import com.smmathews.aoc.y2023.StarSolutionRunner;
 import lombok.Getter;
 import lombok.Value;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@ShellComponent
-public class GearRatios implements StarSolutionRunner {
-
-    @ShellMethod
-    public String d3s1(
-    ) throws IOException {
-        try (var input = getClass().getResourceAsStream("input.txt")) {
-            return d3s1(input);
-        }
-    }
-
-    String d3s1(InputStream inputStream) throws IOException {
-        return run(new String(Objects.requireNonNull(inputStream).readAllBytes(), StandardCharsets.UTF_8));
-    }
-
+public abstract class GearRatios implements StarSolutionRunner {
     private enum PartMatchers {
         empty("^\\.{1}") {
             @Override
             public Part constructPart(String stringValue) {
-                return Empty.getInstance();
+                return Empty.INSTANCE;
             }
         },
         symbol("^[^\\d^\\.]{1}") {
@@ -85,11 +65,7 @@ public class GearRatios implements StarSolutionRunner {
     }
 
     private static class Empty implements Part {
-        private static final Empty instance = new Empty();
-
-        public static Empty getInstance() {
-            return instance;
-        }
+        public static final Empty INSTANCE = new Empty();
     }
 
     @Value
@@ -110,7 +86,7 @@ public class GearRatios implements StarSolutionRunner {
     int width = 0;
     int height = 0;
 
-    private void fill(String input) {
+    protected void fill(String input) {
         input.lines().forEach(line -> {
             int consumed = 0;
             height++;
@@ -134,11 +110,11 @@ public class GearRatios implements StarSolutionRunner {
         try {
             return parts.get(x + (y * width));
         } catch (IndexOutOfBoundsException ignored) {
-            return Empty.getInstance();
+            return Empty.INSTANCE;
         }
     }
 
-    int getNumbersNearSymbolsSum() {
+    protected int getNumbersNearSymbolsSum() {
         int sum = 0;
         HashSet<Number> countedNumbers = new HashSet<>();
         for (int x = 0; x < width; ++x) {
@@ -163,9 +139,27 @@ public class GearRatios implements StarSolutionRunner {
         return sum;
     }
 
-    @Override
-    public String run(String input) {
-        fill(input);
-        return Integer.toString(getNumbersNearSymbolsSum());
+    protected long getGearRatiosSum() {
+        long sum = 0;
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                var part = getPart(x, y);
+                if (part instanceof Symbol symbolPart && symbolPart.getSymbol() == '*') {
+                    HashSet<Number> nearNumberParts = new HashSet<>();
+                    for (int xDiff = -1; nearNumberParts.size() <= 2 && xDiff < 2; xDiff++) {
+                        for (int yDiff = -1; nearNumberParts.size() <= 2 && yDiff < 2; yDiff++) {
+                            var nearPart = getPart(x + xDiff, y + yDiff);
+                            if (nearPart instanceof Number numberPart) {
+                                nearNumberParts.add(numberPart);
+                            }
+                        }
+                    }
+                    if(nearNumberParts.size() == 2) {
+                        sum += nearNumberParts.stream().mapToLong(Number::getNumber).reduce((left, right) -> left*right).orElseThrow();
+                    }
+                }
+            }
+        }
+        return sum;
     }
 }
