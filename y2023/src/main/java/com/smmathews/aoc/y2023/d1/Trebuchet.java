@@ -14,6 +14,14 @@ import java.util.stream.Collectors;
 @ShellComponent
 public class Trebuchet implements Day {
 
+    public Trebuchet(final boolean checkWritten) {
+        this.checkWritten = checkWritten;
+    }
+
+    public Trebuchet() {
+        this(false);
+    }
+
     enum writtenNumbers {
         zero,
         one,
@@ -29,7 +37,7 @@ public class Trebuchet implements Day {
 
     private final Map<String, Integer> writtenLookups = Arrays.stream(writtenNumbers.values()).collect(Collectors.toMap(Enum::name, Enum::ordinal));
 
-    private boolean checkWritten = false;
+    private boolean checkWritten;
 
     @Override
     public String run(String input) {
