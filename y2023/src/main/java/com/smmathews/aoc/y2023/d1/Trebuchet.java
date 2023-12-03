@@ -87,7 +87,7 @@ public class Trebuchet implements Day {
     @ShellMethod(key = "d1s1")
     public String d1star1(
     ) throws IOException {
-        try (var input = getClass().getResourceAsStream("star1.txt")) {
+        try (var input = getClass().getResourceAsStream("input.txt")) {
             return run(new String(Objects.requireNonNull(input).readAllBytes(), StandardCharsets.UTF_8));
         }
     }
