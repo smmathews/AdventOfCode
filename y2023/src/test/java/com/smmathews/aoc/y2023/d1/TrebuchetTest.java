@@ -11,7 +11,7 @@ import java.util.Objects;
 class TrebuchetTest {
 
     @Test
-    void day1_star1_small() throws IOException {
+    void star1_small() throws IOException {
         final Trebuchet trebuchet = new Trebuchet(false);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try(var input = getClass().getResourceAsStream("star1_small_input.txt"); var expectedOutput = getClass().getResourceAsStream("star1_small_output.txt")) {
@@ -21,7 +21,7 @@ class TrebuchetTest {
     }
 
     @Test
-    void day1_star2_small() throws IOException {
+    void star2_small() throws IOException {
         final Trebuchet trebuchet = new Trebuchet(true);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try(var input = getClass().getResourceAsStream("star2_small_input.txt"); var expectedOutput = getClass().getResourceAsStream("star2_small_output.txt")) {
