@@ -1,10 +1,11 @@
-package com.smmathews.aoc.y2023.d2;
+package com.smmathews.aoc.y2023.d2.s1;
 
-import com.smmathews.aoc.y2023.Day;
+import com.smmathews.aoc.y2023.StarSolutionRunner;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
@@ -13,13 +14,17 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @ShellComponent
-public class CubeConundrumPossibleGames implements Day {
-    @ShellMethod(key = "d2s1")
-    public String d1star1(
+public class CubeConundrumPossibleGames implements StarSolutionRunner {
+    @ShellMethod
+    public String d2s1(
     ) throws IOException {
         try (var input = getClass().getResourceAsStream("input.txt")) {
-            return run(new String(Objects.requireNonNull(input).readAllBytes(), StandardCharsets.UTF_8));
+            return d2s1(input);
         }
+    }
+
+    String d2s1(InputStream inputStream) throws IOException {
+        return run(new String(Objects.requireNonNull(inputStream).readAllBytes(), StandardCharsets.UTF_8));
     }
 
     enum CubeColors {

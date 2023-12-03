@@ -1,26 +1,16 @@
 package com.smmathews.aoc.y2023.d1;
 
-import com.smmathews.aoc.y2023.Day;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
+import com.smmathews.aoc.y2023.StarSolutionRunner;
+import lombok.RequiredArgsConstructor;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@ShellComponent
-public class Trebuchet implements Day {
-
-    public Trebuchet(final boolean checkWritten) {
-        this.checkWritten = checkWritten;
-    }
-
-    public Trebuchet() {
-        this(false);
-    }
+@RequiredArgsConstructor
+public abstract class Trebuchet implements StarSolutionRunner {
+    private final boolean checkWritten;
 
     enum writtenNumbers {
         zero,
@@ -37,7 +27,6 @@ public class Trebuchet implements Day {
 
     private final Map<String, Integer> writtenLookups = Arrays.stream(writtenNumbers.values()).collect(Collectors.toMap(Enum::name, Enum::ordinal));
 
-    private boolean checkWritten;
 
     @Override
     public String run(String input) {
@@ -82,20 +71,5 @@ public class Trebuchet implements Day {
 
             return Objects.requireNonNull(first[0])*10 + Objects.requireNonNull(last[0]);
         }).sum());
-    }
-
-    @ShellMethod(key = "d1s1")
-    public String d1star1(
-    ) throws IOException {
-        try (var input = getClass().getResourceAsStream("input.txt")) {
-            return run(new String(Objects.requireNonNull(input).readAllBytes(), StandardCharsets.UTF_8));
-        }
-    }
-
-    @ShellMethod(key = "d1s2")
-    public String d1star2(
-    ) throws IOException {
-        this.checkWritten = true;
-        return d1star1();
     }
 }

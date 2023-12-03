@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public interface Day {
+public interface StarSolutionRunner {
 
     String run(String input);
 

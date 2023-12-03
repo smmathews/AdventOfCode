@@ -1,23 +1,28 @@
-package com.smmathews.aoc.y2023.d2;
+package com.smmathews.aoc.y2023.d2.s2;
 
-import com.smmathews.aoc.y2023.Day;
+import com.smmathews.aoc.y2023.StarSolutionRunner;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 @ShellComponent
-public class CubeConundrumMinDice implements Day {
-    @ShellMethod(key = "d2s2")
-    public String d1star1(
+public class CubeConundrumMinDice implements StarSolutionRunner {
+    @ShellMethod
+    public String d2s2(
     ) throws IOException {
         try (var input = getClass().getResourceAsStream("input.txt")) {
-            return run(new String(Objects.requireNonNull(input).readAllBytes(), StandardCharsets.UTF_8));
+            return d2s2(input);
         }
+    }
+
+    String d2s2(InputStream inputStream) throws IOException {
+        return run(new String(Objects.requireNonNull(inputStream).readAllBytes(), StandardCharsets.UTF_8));
     }
 
     private static final Pattern bagContentPattern = Pattern.compile("[:,;] (\\d+) (\\w+)");
