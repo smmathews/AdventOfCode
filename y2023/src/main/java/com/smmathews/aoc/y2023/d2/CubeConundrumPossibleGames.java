@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @ShellComponent
-public class CubeConundrum implements Day {
+public class CubeConundrumPossibleGames implements Day {
     @ShellMethod(key = "d2s1")
     public String d1star1(
     ) throws IOException {
@@ -44,12 +44,12 @@ public class CubeConundrum implements Day {
         public abstract int maxCubes();
     }
 
-    private static final Map<String, Integer> colorsToMax = Arrays.stream(CubeColors.values()).collect(Collectors.toMap(e -> e.name(), e-> e.maxCubes()));
+    private static final Map<String, Integer> colorsToMax = Arrays.stream(CubeColors.values()).collect(Collectors.toMap(Enum::name, CubeColors::maxCubes));
     private static final Pattern bagContentPattern = Pattern.compile("[:,;] (\\d+) (\\w+)");
 
     // 0 if the bag is impossible, ID if the bag is possible
-    private int scoreOfBag(String bag) {
-        Integer gameId = Integer.valueOf(bag.substring("Game ".length(), bag.indexOf(":")));
+    private static int scoreOfBag(String bag) {
+        int gameId = Integer.parseInt(bag.substring("Game ".length(), bag.indexOf(":")));
 
         boolean possible = true;
 
@@ -57,7 +57,7 @@ public class CubeConundrum implements Day {
 
         var matches = bagContentPattern.matcher(restOfBag);
         while(possible && matches.find()) {
-            Integer num = Integer.valueOf(matches.group(1));
+            int num = Integer.parseInt(matches.group(1));
             String color = matches.group(2);
 
             var colorGroup = colorsToMax.get(color);
@@ -70,6 +70,6 @@ public class CubeConundrum implements Day {
 
     @Override
     public String run(String input) {
-        return Integer.toString(input.lines().mapToInt(line -> scoreOfBag(line)).sum());
+        return Integer.toString(input.lines().mapToInt(CubeConundrumPossibleGames::scoreOfBag).sum());
     }
 }

@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-class CubeConundrumTest {
+class CubeConundrumMinDiceTest {
     @Test
     void star1_small() throws IOException {
-        final CubeConundrum cubeConundrum = new CubeConundrum();
+        final CubeConundrumMinDice cubeConundrum = new CubeConundrumMinDice();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try(var input = getClass().getResourceAsStream("star1_small_input.txt"); var expectedOutput = getClass().getResourceAsStream("star1_small_output.txt")) {
+        try(var input = getClass().getResourceAsStream("star2_small_input.txt"); var expectedOutput = getClass().getResourceAsStream("star2_small_output.txt")) {
             cubeConundrum.run(Objects.requireNonNull(input), outputStream);
             Assertions.assertEquals(new String(Objects.requireNonNull(expectedOutput).readAllBytes(), StandardCharsets.UTF_8), outputStream.toString());
         }
