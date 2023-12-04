@@ -7,7 +7,6 @@ import org.springframework.shell.standard.ShellMethod;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -35,15 +34,16 @@ public class ScratchcardsTotalCards extends Scratchcards {
             constructCard(line).getPoints();
             cardIdtoCard.put(card.cardId(), card);
         });
-        var toProcess = new ArrayDeque<>(cardIdtoCard.keySet());
+
         int cardId;
         long numCards = 0L;
-        while(!toProcess.isEmpty()) {
-            cardId = toProcess.removeLast();
-            var points = cardIdtoCard.get(cardId).getNumMatching();
-            Integer sum = 1;
-            for(int i = 1; i <= points; ++i) {
-                var resultingCardId = cardId + i;
+        int toProcess = cardIdtoCard.size();
+        while(toProcess > 0) {
+            cardId = toProcess--;
+            var numMatching = cardIdtoCard.get(cardId).getNumMatching();
+            int sum = 1;
+            for(int i = 0; i < numMatching; ++i) {
+                var resultingCardId = cardId + i + 1;
                 sum += cardIdtoNumCards.get(resultingCardId);
             }
             cardIdtoNumCards.put(cardId, sum);
