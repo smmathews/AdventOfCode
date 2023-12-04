@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @ShellComponent
-public class ScratchcardsWorth extends Scratchcards {
+public class ScratchcardsPoints extends Scratchcards {
 
     @ShellMethod
     public String d4s1(
@@ -26,6 +26,6 @@ public class ScratchcardsWorth extends Scratchcards {
 
     @Override
     public String run(String input) {
-        return Long.toString(input.lines().mapToLong(line -> constructCard(line).getWorth()).sum());
+        return Long.toString(input.lines().mapToLong(line -> constructCard(line).getPoints()).sum());
     }
 }

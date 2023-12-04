@@ -6,15 +6,20 @@ import java.util.HashSet;
 import java.util.regex.Pattern;
 
 public abstract class Scratchcards implements StarSolutionRunner {
-    protected record Card(Integer gameId, HashSet<Integer> winners, HashSet<Integer> have) {
-        public long getWorth() {
-            var myWinners = new HashSet<>(have);
-            myWinners.removeIf(have -> !winners.contains(have));
-            if(myWinners.isEmpty()) {
+    protected record Card(Integer cardId, HashSet<Integer> winners, HashSet<Integer> have) {
+        public long getPoints() {
+            var numMatching = getNumMatching();
+            if(numMatching <= 0) {
                 return 0;
             } else {
-                return 1L << (myWinners.size() - 1);
+                return 1L << (numMatching - 1);
             }
+        }
+
+        public int getNumMatching() {
+            var myWinners = new HashSet<>(have);
+            myWinners.removeIf(have -> !winners.contains(have));
+            return myWinners.size();
         }
     }
 
