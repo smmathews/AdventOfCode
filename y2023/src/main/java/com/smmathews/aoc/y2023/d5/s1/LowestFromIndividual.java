@@ -1,6 +1,6 @@
 package com.smmathews.aoc.y2023.d5.s1;
 
-import com.smmathews.aoc.y2023.d5.Day5;
+import com.smmathews.aoc.y2023.d5.Fertilizer;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -10,11 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @ShellComponent
-public class Lowest extends Day5 {
+public class LowestFromIndividual extends Fertilizer {
     @ShellMethod
     public String d5s1(
     ) throws IOException {
-        try (var input = Day5.class.getResourceAsStream("input.txt")) {
+        try (var input = Fertilizer.class.getResourceAsStream("input.txt")) {
             return d5s1(input);
         }
     }
@@ -26,6 +26,6 @@ public class Lowest extends Day5 {
     @Override
     public String run(String input) {
         fill(input);
-        return Long.toString(findLowestDestination());
+        return Long.toString(findLowestDestinationWithIndividualSeeds());
     }
 }

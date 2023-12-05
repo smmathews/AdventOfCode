@@ -1,6 +1,8 @@
 package com.smmathews.aoc.y2023.d5;
 
 import com.smmathews.aoc.y2023.StarSolutionRunner;
+import org.roaringbitmap.IntConsumer;
+import org.roaringbitmap.RoaringBitmap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public abstract class Day5 implements StarSolutionRunner {
+public abstract class Fertilizer implements StarSolutionRunner {
     protected record MappingRange(long destinationNum, long sourceNum, long range){
         public long mapFromSource(long s) {
             return destinationNum + (s - sourceNum);
@@ -36,7 +38,8 @@ public abstract class Day5 implements StarSolutionRunner {
             startingSourceName = matchedStartingSource.group("startingsourcename");
             Scanner scanner = new Scanner(matchedStartingSource.group("startingsourcenum"));
             while (scanner.hasNextLong()) {
-                staringSourceNums.add(scanner.nextLong());
+                var toAdd = scanner.nextLong();
+                staringSourceNums.add(toAdd);
             }
         }
         lines.next(); // skip blank
@@ -56,16 +59,15 @@ public abstract class Day5 implements StarSolutionRunner {
         }
     }
 
-    protected long findLowestDestination() {
-        String curSourceName = startingSourceName;
-        ArrayList<Long> curSourceNums = new ArrayList<>(staringSourceNums);
+    private long findLowestDestinationWithSpecifiedSeeds(String curSourceName, RoaringBitmap curSourceNums) {
         while(sourceToMapping.containsKey(curSourceName)) {
             var mapping = sourceToMapping.get(curSourceName);
-            ArrayList<Long> nextSourceNums = new ArrayList<>(curSourceNums.size());
-            curSourceNums.forEach(s -> {
-                var mappingRange = mapping.ranges.stream().filter(r -> r.sourceInRange(s)).findAny().stream().findAny();
+            RoaringBitmap nextSourceNums = new RoaringBitmap();
+            curSourceNums.forEach((IntConsumer) s -> {
+                var unsigned = Integer.toUnsignedLong(s);
+                var mappingRange = mapping.ranges.stream().filter(r -> r.sourceInRange(unsigned)).findAny().stream().findAny();
                 if(mappingRange.isPresent()) {
-                    nextSourceNums.add(mappingRange.get().mapFromSource(s));
+                    nextSourceNums.add((int) mappingRange.get().mapFromSource(unsigned));
                 } else {
                     nextSourceNums.add(s);
                 }
@@ -73,6 +75,23 @@ public abstract class Day5 implements StarSolutionRunner {
             curSourceName = mapping.destination;
             curSourceNums = nextSourceNums;
         }
-        return curSourceNums.stream().min(Long::compare).orElseThrow();
+        return curSourceNums.stream().mapToLong(Integer::toUnsignedLong).min().orElseThrow();
+    }
+
+    protected long findLowestDestinationWithIndividualSeeds() {
+        RoaringBitmap curSourceNums = new RoaringBitmap();
+        staringSourceNums.forEach(l -> curSourceNums.add(l.intValue()));
+        return findLowestDestinationWithSpecifiedSeeds(startingSourceName, curSourceNums);
+    }
+
+    protected long findLowestDestinationWithSeedRanges() {
+        RoaringBitmap curSourceNums = new RoaringBitmap();
+        var ranges = staringSourceNums.stream().iterator();
+        while(ranges.hasNext()) {
+            var start = ranges.next();
+            var range = ranges.next();
+            curSourceNums.add(start, start + range);
+        }
+        return findLowestDestinationWithSpecifiedSeeds(startingSourceName, curSourceNums);
     }
 }
