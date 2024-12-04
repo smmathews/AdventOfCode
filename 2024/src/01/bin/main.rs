@@ -24,5 +24,29 @@ fn main() {
     for it in left_and_right.left.iter().zip(left_and_right.right.iter()) {
         distance += it.0.abs_diff(*it.1) as u64;
     }
-    println!("{}", distance);
+    println!("star 1 {}", distance);
+
+    let mut similarity: u64 = 0;
+
+    let mut last_right : u32 = u32::MAX;
+    let mut num_last_right = 0;
+    let mut right_iter = left_and_right.right.iter().peekable();
+    for left_val in left_and_right.left.iter() {
+        while right_iter.peek().is_some_and(|&right_val| right_val < left_val) {
+            right_iter.next();
+        }
+        if *left_val == last_right {
+            similarity += (left_val * num_last_right) as u64;
+        } else if right_iter.peek().is_some_and(|&right_val| right_val == left_val) {
+            last_right = *left_val;
+            num_last_right = 0;
+            while right_iter.peek().is_some_and(|&right_val| right_val == left_val) {
+                num_last_right += 1;
+                right_iter.next();
+            }
+            similarity += (left_val * num_last_right) as u64;
+        }
+    }
+
+    println!("star 2 {}", similarity);
 }
