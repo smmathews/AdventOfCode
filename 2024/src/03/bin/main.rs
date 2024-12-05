@@ -23,17 +23,16 @@ fn read_line(input : &str) -> Vec<MulOperation> {
     let mut dos_iter = dos.iter().peekable();
     let mut donts_iter = donts.iter().peekable();
     let mut last_do : isize = 0;
-    let mut last_dont = isize::MIN;
+    let mut last_dont;
     let mut disabled = false;
     let mut muls : Vec<MulOperation> = Vec::new();
     for found_match in mul_regex.find_iter(input) {
-        /// update disabled from both iterators
         let cur_start = found_match.start();
-        while(dos_iter.peek().is_some_and(|x| **x <= cur_start)) {
+        while dos_iter.peek().is_some_and(|x| **x <= cur_start) {
             last_do = *dos_iter.next().unwrap() as isize;
             disabled = false;
         }
-        while(donts_iter.peek().is_some_and(|x| **x <= cur_start)) {
+        while donts_iter.peek().is_some_and(|x| **x <= cur_start) {
             last_dont = *donts_iter.next().unwrap() as isize;
             if last_dont > last_do {
                 disabled = true;
@@ -46,15 +45,16 @@ fn read_line(input : &str) -> Vec<MulOperation> {
     muls
 }
 
-fn main() {
-    let my_str = include_str!("input");
-    let muls = read_line(&my_str);
+fn star(input : &str, respect_disabled: bool) -> u64 {
+    let muls = read_line(input);
     let mut added_muls : u64 = 0;
-    let mut added_muls_respect_disabled : u64 = 0;
     for mul in muls {
-        added_muls += mul.operate(false);
-        added_muls_respect_disabled += mul.operate(true);
+        added_muls += mul.operate(respect_disabled);
     }
-    println!("star 1 {}", added_muls);
-    println!("star 2 {}", added_muls_respect_disabled);
+    added_muls
+}
+
+fn main() {
+    println!("star 1 {}", star(include_str!("input1"), false));
+    println!("star 2 {}", star(include_str!("input2"), true));
 }
